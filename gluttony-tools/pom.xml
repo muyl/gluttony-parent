@@ -45,5 +45,10 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
     </dependencies>
 </project>
