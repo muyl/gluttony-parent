@@ -46,41 +46,9 @@ public class AESUtils {
     }
 
 
-    private SecretKeySpec skeySpec;
-    private Cipher cipher;
 
-    public AESUtils(byte[] keyraw) throws Exception {
-        if (keyraw == null) {
-            byte[] bytesOfMessage = "".getBytes(StandardCharsets.UTF_8);
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] bytes = md.digest(bytesOfMessage);
 
-            skeySpec = new SecretKeySpec(bytes, "AES");
-            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        } else {
-            skeySpec = new SecretKeySpec(keyraw, "AES");
-            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        }
-    }
 
-    public AESUtils(String passphrase) throws Exception {
-        byte[] bytesOfMessage = passphrase.getBytes(StandardCharsets.UTF_8);
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] theDigest = md.digest(bytesOfMessage);
-        skeySpec = new SecretKeySpec(theDigest, "AES");
-
-        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-    }
-
-    public AESUtils() throws Exception {
-        byte[] bytesOfMessage = "".getBytes(StandardCharsets.UTF_8);
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] thedigest = md.digest(bytesOfMessage);
-        skeySpec = new SecretKeySpec(thedigest, "AES");
-
-        skeySpec = new SecretKeySpec(new byte[16], "AES");
-        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-    }
 
     /**
      * 加密:先AES再base64
@@ -89,8 +57,9 @@ public class AESUtils {
      * @return
      * @throws Exception
      */
-    public String encrypt(String plainText) throws Exception {
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+    public static String encrypt(String plainText, String passphrase) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(passphrase));
         byte[] cipherText = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(cipherText);
     }
@@ -102,10 +71,40 @@ public class AESUtils {
      * @return
      * @throws Exception
      */
-    public String decrypt(String cipherText) throws Exception {
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+    public static String decrypt(String cipherText, String passphrase) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passphrase));
         byte[] plain64text = Base64.getDecoder().decode(cipherText);
         byte[] plaintext = cipher.doFinal(plain64text);
         return new String(plaintext, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 生成加密秘钥
+     *
+     * @return
+     */
+    private static SecretKeySpec getSecretKey(String password) {
+        try {
+            byte[] bytesOfMessage = password.getBytes(StandardCharsets.UTF_8);
+            MessageDigest md = null;
+            md = MessageDigest.getInstance("MD5");
+            byte[] bytes = md.digest(bytesOfMessage);
+            return new SecretKeySpec(bytes, "AES");
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        String result = AESUtils.encrypt("11222", "");
+        System.out.println("11222加密后结果：" + result + ",密钥：" + "");
+        System.out.println(AESUtils.decrypt(result, ""));
+        System.out.println("============");
+        String result1 = AESUtils.encrypt("11222", "111");
+        System.out.println("11222加密后结果：" + result1 + ",密钥：" + "111");
+        System.out.println(AESUtils.decrypt(result1, "111"));
     }
 }
