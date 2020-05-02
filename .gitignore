@@ -1,0 +1,8 @@
+/glutony-kafka/src/test/
+.gitignore
+glutony-kafka/target/
+gluttony-tools/src/test/
+gluttony-tools/target/classes/com/github/redis/
+gluttony-tools/target/generated-sources/
+gluttony-tools/target/generated-test-sources/
+gluttony-tools/target/test-classes/
