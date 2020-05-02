@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,8 +19,16 @@ public class MessageHandler {
         LOGGER.info("开始处理消息1：{}", message);
     }
 
-    @KafkaListener(topics = {"test-topic"})
-    public void handle(ConsumerRecord<String, String> record) {
-        LOGGER.info("开始处理消息2：{}", record);
+    @KafkaListener(topics = {"test-topic"}, containerFactory = "ackContainerFactory")
+    public void handle(ConsumerRecord record, Acknowledgment acknowledgment) {
+        try {
+            String message = (String) record.value();
+            LOGGER.info("收到消息: {}", message);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            // 手动提交 offset
+            acknowledgment.acknowledge();
+        }
     }
 }
