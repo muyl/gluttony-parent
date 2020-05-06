@@ -9,6 +9,7 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 
 /**
+ * kafka配置
  * @author 拓仲 on 2020/5/2
  */
 @Configuration
