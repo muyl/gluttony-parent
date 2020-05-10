@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gluttony-tools" />
+        <module name="glutony-eureka" />
         <module name="gluttony-activemq" />
         <module name="glutony-kafka" />
       </profile>
@@ -14,6 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="glutony-eureka" options="-parameters" />
       <module name="glutony-kafka" options="-parameters" />
       <module name="gluttony-activemq" options="-parameters" />
       <module name="gluttony-tools" options="-parameters" />
