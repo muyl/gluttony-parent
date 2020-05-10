@@ -72,22 +72,25 @@
 
     <profiles>
         <profile>
-            <id>default</id>
+            <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>uat</id>
             <properties>
-                <spring-javaformat.version>0.0.12</spring-javaformat.version>
+                <profileActive>uat</profileActive>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>io.spring.javaformat</groupId>
-                        <artifactId>spring-javaformat-maven-plugin</artifactId>
-                        <version>${spring-javaformat.version}</version>
-                    </plugin>
-                </plugins>
-            </build>
+        </profile>
+        <profile>
+            <id>prd</id>
+            <properties>
+                <profileActive>prd</profileActive>
+            </properties>
         </profile>
     </profiles>
 
