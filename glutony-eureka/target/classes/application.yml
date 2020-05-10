@@ -1,0 +1,15 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eurka-server
+  security:
+    user:
+      name: admin
+      password: admin
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@127.0.0.1:${server.port}/eureka/
