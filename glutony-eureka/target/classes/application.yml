@@ -1,16 +1,25 @@
-eureka:
-  client:
-    fetch-registry: false
-    register-with-eureka: true
-    serviceUrl:
-      defaultZone: http://admin:admin@localhost:8761/eureka
-  instance:
-    hostname: localhost
-server:
-  port: 8761
 spring:
+  application:
+    name: gluttony-eureka
   security:
     user:
       name: admin
       password: admin
       roles: SUPERUSER
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://admin:admin@localhost:8762/eureka
+  instance:
+    instance:
+      # 使用IP代替实例名
+      prefer-ip-address: true
+      # 实例的主机名
+      hostname: ${spring.cloud.client.ip-address}
+      # 实例ID规则
+      instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+server:
+  port: 8762
+
